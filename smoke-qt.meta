@@ -1,0 +1,6 @@
+;; -*- scheme -*-
+
+((license "BSD")
+ (category ui)
+ (author "John J. Foerch")
+ (synopsis "Smoke Qt"))

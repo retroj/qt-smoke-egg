@@ -1,0 +1,17 @@
+;; -*- scheme -*-
+
+(compile smoke-qtcore.scm -j smoke-qtcore -s -O2 -d0 -c++
+         -lsmokeqtcore)
+(compile smoke-qtcore.import.scm -s -O2 -d0 -c++
+         -lsmokeqtcore)
+
+(compile smoke-qtgui.scm -j smoke-qtgui -s -O2 -d0 -c++
+         -lsmokeqtgui)
+(compile smoke-qtgui.import.scm -s -O2 -d0 -c++
+         -lsmokeqtgui)
+
+(install-extension
+ 'smoke-qt
+ '("smoke-qtcore.so" "smoke-qtcore.import.so"
+   "smoke-qtgui.so" "smoke-qtgui.import.so")
+ '((version 0.1)))

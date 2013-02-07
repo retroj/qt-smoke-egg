@@ -5,8 +5,8 @@
  coops
  extras
  smoke
- smoke-qtcore
- smoke-qtgui)
+ qtcore
+ qtgui)
 
 (init-qtcore-smoke)
 (init-qtgui-smoke)

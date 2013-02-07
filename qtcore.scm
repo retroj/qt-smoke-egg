@@ -24,7 +24,7 @@
 ;; OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ;; ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(module smoke-qtgui
+(module qtcore
     *
 
 (import chicken scheme foreign)
@@ -34,16 +34,16 @@
  extras
  smoke)
 
-(foreign-declare "#include <smoke/qtgui_smoke.h>")
+(foreign-declare "#include <smoke/qtcore_smoke.h>")
 
-(define-foreign-variable %qtgui-smoke c-pointer "qtgui_Smoke")
-(define qtgui-smoke #f)
+(define-foreign-variable %qtcore-smoke c-pointer "qtcore_Smoke")
+(define qtcore-smoke #f)
 
-(define (init-qtgui-smoke)
-  ((foreign-lambda void init_qtgui_Smoke))
-  (set! qtgui-smoke (make <Smoke> 'this %qtgui-smoke)))
+(define (init-qtcore-smoke)
+  ((foreign-lambda void init_qtcore_Smoke))
+  (set! qtcore-smoke (make <Smoke> 'this %qtcore-smoke)))
 
-(define delete-qtgui-smoke
-  (foreign-lambda void delete_qtgui_Smoke))
+(define delete-qtcore-smoke
+  (foreign-lambda void delete_qtcore_Smoke))
 
 )

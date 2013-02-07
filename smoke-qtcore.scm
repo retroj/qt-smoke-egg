@@ -31,15 +31,17 @@
 
 (use
  coops
- cplusplus-object
- extras)
+ extras
+ smoke)
 
 (foreign-declare "#include <smoke/qtcore_smoke.h>")
 
-(define-foreign-variable qtcore-smoke c-pointer "qtcore_Smoke")
+(define-foreign-variable %qtcore-smoke c-pointer "qtcore_Smoke")
+(define qtcore-smoke #f)
 
-(define init-qtcore-smoke
-  (foreign-lambda void init_qtcore_Smoke))
+(define (init-qtcore-smoke)
+  ((foreign-lambda void init_qtcore_Smoke))
+  (set! qtcore-smoke (make <Smoke> 'this %qtcore-smoke)))
 
 (define delete-qtcore-smoke
   (foreign-lambda void delete_qtcore_Smoke))

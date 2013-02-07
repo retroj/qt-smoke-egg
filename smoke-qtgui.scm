@@ -31,15 +31,17 @@
 
 (use
  coops
- cplusplus-object
- extras)
+ extras
+ smoke)
 
 (foreign-declare "#include <smoke/qtgui_smoke.h>")
 
-(define-foreign-variable qtgui-smoke c-pointer "qtgui_Smoke")
+(define-foreign-variable %qtgui-smoke c-pointer "qtgui_Smoke")
+(define qtgui-smoke #f)
 
-(define init-qtgui-smoke
-  (foreign-lambda void init_qtgui_Smoke))
+(define (init-qtgui-smoke)
+  ((foreign-lambda void init_qtgui_Smoke))
+  (set! qtgui-smoke (make <Smoke> 'this %qtgui-smoke)))
 
 (define delete-qtgui-smoke
   (foreign-lambda void delete_qtgui_Smoke))

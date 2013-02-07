@@ -11,7 +11,7 @@
          -lsmokeqtgui)
 
 (install-extension
- 'smoke-qt
+ 'qt-smoke
  '("smoke-qtcore.so" "smoke-qtcore.import.so"
    "smoke-qtgui.so" "smoke-qtgui.import.so")
  '((version 0.1)))

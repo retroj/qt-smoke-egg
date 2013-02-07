@@ -1,0 +1,3 @@
+(repo git "git://github.com/retroj/qt-smoke-egg.git")
+(uri targz "https://github.com/retroj/qt-smoke-egg/tarball/{egg-release}")
+(release "0.1")

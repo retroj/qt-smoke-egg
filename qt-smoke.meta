@@ -3,4 +3,4 @@
 ((license "BSD")
  (category ui)
  (author "John J. Foerch")
- (synopsis "Smoke Qt"))
+ (synopsis "Bindings for Qt via Smoke"))

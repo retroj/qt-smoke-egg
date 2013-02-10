@@ -1,0 +1,10 @@
+$ csi -s smoke-test.scm 
+smoke-egg: started
+QApplication classId: [qtgui, 46], QApplication($?) methId: [qtgui, 1329]
+QWidget classId: [qtgui, 458], QWidget() methId: [qtgui, 14780]
+QWidget classId: [qtgui, 458], show() methId: [qtgui, 15029]
+QApplication classId: 46, exec() methId: [qtgui, 1362]
+QWidget(0x8cfae0)::protected mousePressEvent(QMouseEvent*)
+QWidget(0x8cfae0)::protected mousePressEvent(QMouseEvent*)
+QApplication classId: 46, ~QApplication() methId: [qtgui, 1447]
+~QApplication (0x87cfb0)

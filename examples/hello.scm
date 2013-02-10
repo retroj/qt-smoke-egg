@@ -74,7 +74,7 @@
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
-    (call-method (ModuleIndex-smoke methid) methid #f stack)
+    (call-method/safe (ModuleIndex-smoke methid) methid #f stack)
     (printf "QApplication exec() return value: ~A~%"
             (stack-int stack 0))
 
@@ -85,6 +85,6 @@
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
-    (call-method (ModuleIndex-smoke methid) methid qapp stack)))
+    (call-method/safe (ModuleIndex-smoke methid) methid qapp stack)))
 (delete-qtcore-smoke)
 (delete-qtgui-smoke)

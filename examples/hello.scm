@@ -15,10 +15,8 @@
 
 (init-qtcore-smoke)
 (init-qtgui-smoke)
-(let ((qtcore-binding (make <SchemeSmokeBinding>))
-      (qtgui-binding (make <SchemeSmokeBinding>)))
-  (constructor qtcore-binding (slot-value qtcore-smoke 'this))
-  (constructor qtgui-binding (slot-value qtgui-smoke 'this))
+(let ((qtcore-binding (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
+      (qtgui-binding (make <SchemeSmokeBinding> 'smoke qtgui-smoke)))
   (let* ((classid (find-class qtcore-smoke "QApplication"))
          (methid (find-method (ModuleIndex-smoke classid)
                               "QApplication" "QApplication$?"))

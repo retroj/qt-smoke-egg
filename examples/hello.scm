@@ -8,6 +8,7 @@
 
 (use
  coops
+ cplusplus-object
  extras
  smoke
  qtcore
@@ -15,9 +16,11 @@
 
 (init-qtcore-smoke)
 (init-qtgui-smoke)
-(let* ((qtcore-binding (make-MySmokeBinding qtcore-smoke))
-       (qtgui-binding (make-MySmokeBinding qtgui-smoke))
-       (classid (find-class qtcore-smoke "QApplication"))
+(let ((qtcore-binding (make <SchemeSmokeBinding>))
+      (qtgui-binding (make <SchemeSmokeBinding>)))
+  (constructor qtcore-binding (list (slot-value qtcore-smoke 'this)))
+  (constructor qtgui-binding (list (slot-value qtgui-smoke 'this)))
+(let* ((classid (find-class qtcore-smoke "QApplication"))
        (methid (find-method (ModuleIndex-smoke classid)
                             "QApplication" "QApplication$?"))
        (stack (make-stack 3))
@@ -34,7 +37,7 @@
   (set! qapp (stack-pointer stack 0))
   ;; // method index 0 is always "set smoke binding" - needed for
   ;; // virtual method callbacks etc.
-  (stack-set-pointer! stack 1 qtgui-binding)
+  (stack-set-pointer! stack 1 (slot-value qtgui-binding 'this))
   (call-method/classid+methidx
    (ModuleIndex-smoke classid) classid 0 qapp stack)
 
@@ -50,7 +53,7 @@
           (ModuleIndex-index methid))
   (call-method (ModuleIndex-smoke methid) methid #f stack)
   (set! widget (stack-pointer stack 0))
-  (stack-set-pointer! stack 1 qtgui-binding)
+  (stack-set-pointer! stack 1 (slot-value qtgui-binding 'this))
   (call-method/classid+methidx
    (ModuleIndex-smoke classid) classid 0 widget stack)
 
@@ -85,6 +88,6 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method (ModuleIndex-smoke methid) methid qapp stack))
+  (call-method (ModuleIndex-smoke methid) methid qapp stack)))
 (delete-qtcore-smoke)
 (delete-qtgui-smoke)

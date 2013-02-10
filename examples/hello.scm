@@ -8,7 +8,6 @@
 
 (use
  coops
- cplusplus-object
  extras
  smoke
  qtcore
@@ -18,8 +17,8 @@
 (init-qtgui-smoke)
 (let ((qtcore-binding (make <SchemeSmokeBinding>))
       (qtgui-binding (make <SchemeSmokeBinding>)))
-  (constructor qtcore-binding (list (slot-value qtcore-smoke 'this)))
-  (constructor qtgui-binding (list (slot-value qtgui-smoke 'this)))
+  (constructor qtcore-binding (slot-value qtcore-smoke 'this))
+  (constructor qtgui-binding (slot-value qtgui-smoke 'this))
   (let* ((classid (find-class qtcore-smoke "QApplication"))
          (methid (find-method (ModuleIndex-smoke classid)
                               "QApplication" "QApplication$?"))

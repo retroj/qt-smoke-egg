@@ -1,4 +1,9 @@
 
+;;;
+;;; Scheme implementation of hello.cpp from:
+;;;   http://techbase.kde.org/Development/Languages/Smoke#hello.cpp
+;;;
+
 (import chicken scheme)
 
 (use
@@ -70,7 +75,8 @@
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
   (call-method (ModuleIndex-smoke methid) methid #f stack)
-  ;; we could get the integer return value from stack[0] here, too
+  (printf "QApplication exec() return value: ~A~%"
+          (stack-int stack 0))
 
   ;; destroy the QApplication instance
   ;;
@@ -79,7 +85,6 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method (ModuleIndex-smoke methid) methid qapp stack)
-  )
+  (call-method (ModuleIndex-smoke methid) methid qapp stack))
 (delete-qtcore-smoke)
 (delete-qtgui-smoke)

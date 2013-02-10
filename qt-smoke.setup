@@ -10,6 +10,9 @@
 (compile qtgui.import.scm -s -O2 -d0 -c++
          -lsmokeqtgui)
 
+;; http://wiki.call-cc.org/man/4/Extensions#procedures-and-macros-available-in-setup-scripts
+;; "It should be noted here that the extension id has to be identical to
+;; the name of the file implementing the extension" Does this affect us?
 (install-extension
  'qt-smoke
  '("qtcore.so" "qtcore.import.so"

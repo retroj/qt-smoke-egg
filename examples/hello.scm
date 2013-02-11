@@ -33,8 +33,7 @@
   ;; // method index 0 is always "set smoke binding" - needed for
   ;; // virtual method callbacks etc.
   (stack-set-pointer! stack 1 (slot-value qtgui 'this))
-  (call-method/classid+methidx
-   (ModuleIndex-smoke classid) classid 0 qapp stack)
+  (call-method/classid+methidx qtgui classid 0 qapp stack)
 
   ;; create a widget
   ;;
@@ -48,8 +47,7 @@
   (call-method qtgui methid #f stack)
   (set! widget (stack-pointer stack 0))
   (stack-set-pointer! stack 1 (slot-value qtgui 'this))
-  (call-method/classid+methidx
-   (ModuleIndex-smoke classid) classid 0 widget stack)
+  (call-method/classid+methidx qtgui classid 0 widget stack)
 
   ;; show the widget
   ;;

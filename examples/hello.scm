@@ -28,7 +28,7 @@
           (ModuleIndex-index methid))
   (stack-set-int-pointer! stack 1 0)     ;; &argc
   (stack-set-unsigned-long! stack 2 0)   ;; argv
-  (call-method (ModuleIndex-smoke methid) methid #f stack)
+  (call-method qtgui methid #f stack)
   (set! qapp (stack-pointer stack 0))
   ;; // method index 0 is always "set smoke binding" - needed for
   ;; // virtual method callbacks etc.
@@ -45,7 +45,7 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method (ModuleIndex-smoke methid) methid #f stack)
+  (call-method qtgui methid #f stack)
   (set! widget (stack-pointer stack 0))
   (stack-set-pointer! stack 1 (slot-value qtgui 'this))
   (call-method/classid+methidx
@@ -59,7 +59,7 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method (ModuleIndex-smoke methid) methid widget stack)
+  (call-method qtgui methid widget stack)
 
   ;; QApplication exec
   ;;
@@ -69,7 +69,7 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method/safe (ModuleIndex-smoke methid) methid #f stack)
+  (call-method/safe qtgui methid #f stack)
   (printf "QApplication exec() return value: ~A~%"
           (stack-int stack 0))
 
@@ -80,6 +80,6 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method/safe (ModuleIndex-smoke methid) methid qapp stack))
+  (call-method/safe qtgui methid qapp stack))
 (delete-qtcore-smoke)
 (delete-qtgui-smoke)

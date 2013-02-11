@@ -10,22 +10,15 @@
  coops
  extras
  smoke
- qtcore
  qtgui)
 
-(init-qtcore-smoke)
 (init-qtgui-smoke)
-(let* ((qtcore (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
-       (qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
-       (classid (find-class qtcore "QApplication"))
-       (methid (find-method qtcore "QApplication" "QApplication$?"))
+(let* ((qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
+       (classid (find-class qtgui "QApplication"))
+       (methid (find-method qtgui "QApplication" "QApplication$?"))
        (stack (make-stack 3))
        (qapp #f)
        (widget #f))
-  (printf "qtgui-smoke == qtcore-smoke? ~A (~A, ~A)~%"
-          (eq? (slot-value qtgui-smoke 'this) (slot-value qtgui-smoke 'this))
-          (slot-value qtgui-smoke 'this)
-          (slot-value qtgui-smoke 'this))
   (printf "QApplication classId: [~A, ~A], QApplication($?) methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -43,8 +36,8 @@
 
   ;; create a widget
   ;;
-  (set! classid (find-class qtcore "QWidget"))
-  (set! methid (find-method qtcore "QWidget" "QWidget"))
+  (set! classid (find-class qtgui "QWidget"))
+  (set! methid (find-method qtgui "QWidget" "QWidget"))
   (printf "QWidget classId: [~A, ~A], QWidget() methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -58,7 +51,7 @@
 
   ;; show the widget
   ;;
-  (set! methid (find-method qtcore "QWidget" "show"))
+  (set! methid (find-method qtgui "QWidget" "show"))
   (printf "QWidget classId: [~A, ~A], show() methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -68,8 +61,8 @@
 
   ;; QApplication exec
   ;;
-  (set! classid (find-class qtcore "QApplication"))
-  (set! methid (find-method qtcore "QApplication" "exec"))
+  (set! classid (find-class qtgui "QApplication"))
+  (set! methid (find-method qtgui "QApplication" "exec"))
   (printf "QApplication classId: ~A, exec() methId: [~A, ~A]~%"
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
@@ -86,5 +79,4 @@
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
   (call-method/safe (ModuleIndex-smoke methid) methid qapp stack))
-(delete-qtcore-smoke)
 (delete-qtgui-smoke)

@@ -1,0 +1,46 @@
+From: Arno Rehn <arno@arnorehn.de>
+Subject: Re: question about the hello.cpp example
+Newsgroups: gmane.comp.kde.devel.bindings
+To: kde-bindings@kde.org
+Date: Mon, 11 Feb 2013 14:59:24 +0100
+Reply-To: KDE bindings for other programming languages <kde-bindings@kde.org>
+
+On 11/02/13 04:16, John J Foerch wrote:
+> Hello,
+Hello,
+
+> I have been studying the example program hello.cpp from
+> http://techbase.kde.org/Development/Languages/Smoke#hello.cpp as I
+> develop a set of Qt/Smoke bindings for my favorite Scheme dialect, and
+> there is one thing about the program that has me mightily confused.
+>
+> qtcoreBinding and qtguiBinding seem to be used almost interchangeably.
+> The QApplication constructor is looked up in qtcore, but at the end of
+> the program, the destructor is looked up in qtgui.  The "set smoke
+> binding" call for both qapp and widget use qtgui, and nothing uses
+> qtcore.  In my experiments in my scheme implementation of this program,
+> I have found that I can completely remove all references to qtcore in
+> the program and use qtgui instead, and it still works, but not the other
+> way around.
+Yes, you can replace qtcore with qtgui in this case, because only QtGui
+classes are used (i.e. QApplication and QWidget). Method lookups work
+across module boundaries, but they can be faster if you do the call in the
+correct module.
+The QtCore smoke module will implicitly be loaded by the QtGui smoke
+module (you might leak memory then, however, if you don't delete the
+qtcore Smoke instance at the end).
+
+The SmokeBinding instance that you set for each object should be the
+correct one for the respective module, i.e. you have to have one
+SmokeBinding instance per Smoke module (that you use).
+
+> What is the relationship between these two modules?  Does qtgui contain
+> qtcore?  Are they both needed in this program, or in any program that
+> uses qtgui?  Can anybody clarify?
+No, qtgui doesn't contain qtcore. It only implictly loads it. Some types
+in qtgui depend on classes from qtcore (the respective classes are then
+flagged as "external" in qtgui and you'll have to look them up in the
+other modules), so in a more complex app you'll need it anyway.
+
+-- 
+Arno Rehn

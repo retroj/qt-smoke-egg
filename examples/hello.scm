@@ -41,10 +41,7 @@
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
-  (call-method qtgui methid #f stack)
-  (set! widget (stack-pointer stack 0))
-  (stack-set-pointer! stack 1 (slot-value qtgui 'this))
-  (call-method/classid+methidx qtgui classid 0 widget stack)
+  (set! widget (instantiate qtgui "QWidget" "QWidget" stack))
 
   ;; show the widget
   ;;

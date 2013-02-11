@@ -10,8 +10,10 @@
  coops
  extras
  smoke
+ qtcore
  qtgui)
 
+(init-qtcore-smoke)
 (init-qtgui-smoke)
 (let* ((qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
        (classid (find-class qtgui "QApplication"))
@@ -79,4 +81,5 @@
           (smoke-modulename (ModuleIndex-smoke methid))
           (ModuleIndex-index methid))
   (call-method/safe (ModuleIndex-smoke methid) methid qapp stack))
+(delete-qtcore-smoke)
 (delete-qtgui-smoke)

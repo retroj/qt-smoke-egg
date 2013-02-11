@@ -15,25 +15,22 @@
 
 (init-qtcore-smoke)
 (init-qtgui-smoke)
-(let* ((qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
-       (classid (find-class qtgui "QApplication"))
-       (methid (find-method qtgui "QApplication" "QApplication$?"))
-       (stack (make-stack 3))
-       (qapp #f)
-       (widget #f))
-  (printf "QApplication classId: [~A, ~A], QApplication($?) methId: [~A, ~A]~%"
-          (smoke-modulename (ModuleIndex-smoke classid))
-          (ModuleIndex-index classid)
-          (smoke-modulename (ModuleIndex-smoke methid))
-          (ModuleIndex-index methid))
+(let ((qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
+      (stack (make-stack 3))
+      (classid #f)
+      (methid #f)
+      (qapp #f)
+      (widget #f))
+  (let ((classid (find-class qtgui "QApplication"))
+        (methid (find-method qtgui "QApplication" "QApplication$?")))
+    (printf "QApplication classId: [~A, ~A], QApplication($?) methId: [~A, ~A]~%"
+            (smoke-modulename (ModuleIndex-smoke classid))
+            (ModuleIndex-index classid)
+            (smoke-modulename (ModuleIndex-smoke methid))
+            (ModuleIndex-index methid)))
   (stack-set-int-pointer! stack 1 0)     ;; &argc
   (stack-set-unsigned-long! stack 2 0)   ;; argv
-  (call-method qtgui methid #f stack)
-  (set! qapp (stack-pointer stack 0))
-  ;; // method index 0 is always "set smoke binding" - needed for
-  ;; // virtual method callbacks etc.
-  (stack-set-pointer! stack 1 (slot-value qtgui 'this))
-  (call-method/classid+methidx qtgui classid 0 qapp stack)
+  (set! qapp (instantiate qtgui "QApplication" "QApplication$?" stack))
 
   ;; create a widget
   ;;

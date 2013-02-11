@@ -15,14 +15,17 @@
 
 (init-qtcore-smoke)
 (init-qtgui-smoke)
-(let* ((qtcore-binding (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
-       (qtgui-binding (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
-       (classid (find-class qtcore-smoke "QApplication"))
-       (methid (find-method (ModuleIndex-smoke classid)
-                            "QApplication" "QApplication$?"))
+(let* ((qtcore (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
+       (qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
+       (classid (find-class qtcore "QApplication"))
+       (methid (find-method qtcore "QApplication" "QApplication$?"))
        (stack (make-stack 3))
        (qapp #f)
        (widget #f))
+  (printf "qtgui-smoke == qtcore-smoke? ~A (~A, ~A)~%"
+          (eq? (slot-value qtgui-smoke 'this) (slot-value qtgui-smoke 'this))
+          (slot-value qtgui-smoke 'this)
+          (slot-value qtgui-smoke 'this))
   (printf "QApplication classId: [~A, ~A], QApplication($?) methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -34,15 +37,14 @@
   (set! qapp (stack-pointer stack 0))
   ;; // method index 0 is always "set smoke binding" - needed for
   ;; // virtual method callbacks etc.
-  (stack-set-pointer! stack 1 (slot-value qtgui-binding 'this))
+  (stack-set-pointer! stack 1 (slot-value qtgui 'this))
   (call-method/classid+methidx
    (ModuleIndex-smoke classid) classid 0 qapp stack)
 
   ;; create a widget
   ;;
-  (set! classid (find-class qtcore-smoke "QWidget"))
-  (set! methid (find-method (ModuleIndex-smoke classid)
-                            "QWidget" "QWidget"))
+  (set! classid (find-class qtcore "QWidget"))
+  (set! methid (find-method qtcore "QWidget" "QWidget"))
   (printf "QWidget classId: [~A, ~A], QWidget() methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -50,14 +52,13 @@
           (ModuleIndex-index methid))
   (call-method (ModuleIndex-smoke methid) methid #f stack)
   (set! widget (stack-pointer stack 0))
-  (stack-set-pointer! stack 1 (slot-value qtgui-binding 'this))
+  (stack-set-pointer! stack 1 (slot-value qtgui 'this))
   (call-method/classid+methidx
    (ModuleIndex-smoke classid) classid 0 widget stack)
 
   ;; show the widget
   ;;
-  (set! methid (find-method (ModuleIndex-smoke classid)
-                            "QWidget" "show"))
+  (set! methid (find-method qtcore "QWidget" "show"))
   (printf "QWidget classId: [~A, ~A], show() methId: [~A, ~A]~%"
           (smoke-modulename (ModuleIndex-smoke classid))
           (ModuleIndex-index classid)
@@ -67,9 +68,8 @@
 
   ;; QApplication exec
   ;;
-  (set! classid (find-class qtcore-smoke "QApplication"))
-  (set! methid (find-method (ModuleIndex-smoke classid)
-                            "QApplication" "exec"))
+  (set! classid (find-class qtcore "QApplication"))
+  (set! methid (find-method qtcore "QApplication" "exec"))
   (printf "QApplication classId: ~A, exec() methId: [~A, ~A]~%"
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))
@@ -80,7 +80,7 @@
 
   ;; destroy the QApplication instance
   ;;
-  (set! methid (find-method qtgui-smoke "QApplication" "~QApplication"))
+  (set! methid (find-method qtgui "QApplication" "~QApplication"))
   (printf "QApplication classId: ~A, ~~QApplication() methId: [~A, ~A]~%"
           (ModuleIndex-index classid)
           (smoke-modulename (ModuleIndex-smoke methid))

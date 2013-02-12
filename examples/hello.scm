@@ -40,10 +40,10 @@
   ;; make application and widget objects.  QApplication takes two args,
   ;; pointers to argc and argv.
   ;;
-  (smoke-stack-populate! stack `(((c-pointer int) 0) ;; &argc
-                                 (unsigned-long 0))) ;; argv
-
-  (let ((qapp (instantiate qtgui "QApplication" "QApplication$?" stack))
+  (let ((qapp (instantiate qtgui "QApplication" "QApplication$?"
+                           (smoke-stack-populate!
+                            stack `(((c-pointer int) 0) ;; &argc
+                                    (unsigned-long 0))))) ;; argv
         (widget (instantiate qtgui "QWidget" "QWidget" stack)))
 
     ;; show the widget

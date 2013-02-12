@@ -13,7 +13,7 @@
  qtcore
  qtgui)
 
-(let ((stack (make-stack 3))
+(let ((stack (make-smoke-stack 3))
       (classid #f)
       (methid #f))
 
@@ -40,8 +40,8 @@
   ;; make application and widget objects.  QApplication takes two args,
   ;; pointers to argc and argv.
   ;;
-  (stack-set-int-pointer! stack 1 0)     ;; &argc
-  (stack-set-unsigned-long! stack 2 0)   ;; argv
+  (smoke-stack-set-int-pointer! stack 1 0)     ;; &argc
+  (smoke-stack-set-unsigned-long! stack 2 0)   ;; argv
 
   (let ((qapp (instantiate qtgui "QApplication" "QApplication$?" stack))
         (widget (instantiate qtgui "QWidget" "QWidget" stack)))
@@ -67,7 +67,7 @@
             (ModuleIndex-index methid))
     (call-method-with-callbacks qtgui methid #f stack)
     (printf "QApplication exec() return value: ~A~%"
-            (stack-int stack 0))
+            (smoke-stack-int stack 0))
 
     ;; destroy the QApplication instance
     ;;

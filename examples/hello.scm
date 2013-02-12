@@ -13,8 +13,7 @@
  qtcore
  qtgui)
 
-(let ((stack (make-smoke-stack 3))
-      (classid #f)
+(let ((classid #f)
       (methid #f))
 
   ;; print info about QApplication constructor
@@ -54,7 +53,7 @@
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
-    (call-method qtgui methid widget stack)
+    (call-method qtgui methid widget)
 
     ;; QApplication exec
     ;;
@@ -64,9 +63,10 @@
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
-    (call-method-with-callbacks qtgui methid #f stack)
-    (printf "QApplication exec() return value: ~A~%"
-            (smoke-stack-int stack 0))
+    (let ((stack (make-smoke-stack 1)))
+      (call-method-with-callbacks qtgui methid #f stack)
+      (printf "QApplication exec() return value: ~A~%"
+              (smoke-stack-int stack 0)))
 
     ;; destroy the QApplication instance
     ;;
@@ -75,4 +75,4 @@
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
-    (call-method-with-callbacks qtgui methid qapp stack)))
+    (call-method-with-callbacks qtgui methid qapp)))

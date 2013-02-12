@@ -14,8 +14,9 @@
  qtcore
  qtgui)
 
-(define (click-test-handler binding method obj stack abstract?)
-  (let* ((smoke (slot-value binding 'smoke))
+(define (click-test-handler method obj stack abstract?)
+  (let* ((binding (method-binding method))
+         (smoke (slot-value binding 'smoke))
          (protected? (method-protected? method))
          (const? (method-const? method))
          (argsvector (method-args method)))

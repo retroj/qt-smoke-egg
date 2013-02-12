@@ -25,13 +25,12 @@
                         (if const? "const " "")
                         (method-name method)
                         (string-join argtypes ", "))))
-      (printf "~A(~A)::~A ~A~%"
+      (printf "~A(~A)::~A~%"
               (SchemeSmokeBinding-className
                (slot-value binding 'this)
                (method-classid method))
               target
-              sig
-              args))))
+              sig))))
 
 (let ((classid #f)
       (methid #f))

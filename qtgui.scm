@@ -46,9 +46,17 @@
 (define delete-qtgui-smoke
   (foreign-lambda void delete_qtgui_Smoke))
 
+
+(define-class <qtgui-binding> (<SchemeSmokeBinding>)
+  ())
+
+(define-method (make-scheme-object (this <qtgui-binding>) type pointer)
+  (select type
+    (else (call-next-method))))
+
 (init-qtgui-smoke)
 
-(define qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
+(define qtgui (make <qtgui-binding> 'smoke qtgui-smoke))
 
 (set-finalizer! qtgui delete-qtgui-smoke)
 

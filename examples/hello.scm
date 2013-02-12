@@ -13,6 +13,28 @@
  qtcore
  qtgui)
 
+(define (click-test-handler this methidx obj stack abstract?)
+  (let* ((smoke (slot-value this 'smoke))
+         (meth (smoke-method smoke methidx))
+         (protected? (Method-protected? meth))
+         (const? (Method-const? meth))
+         (mname (smoke-method-name smoke meth))
+         (argsvector (smoke-method-args-vector smoke meth)))
+    (let ((name (sprintf "~A~A~A(~A)"
+                         (if protected? "protected " "")
+                         (if const? "const " "")
+                         mname
+                         (string-join
+                          (map (lambda (x) (smoke-type-name smoke x))
+                               (s16vector->list argsvector))
+                          ", "))))
+      (printf "~A(~A)::~A~%"
+              (SchemeSmokeBinding-className
+               (slot-value this 'this)
+               (Method-classId meth))
+              obj
+              name))))
+
 (let ((classid #f)
       (methid #f))
 
@@ -45,6 +67,7 @@
         (widget (instantiate qtgui "QWidget" "QWidget")))
 
     (add-event-handler widget "mousePressEvent" click-test-handler)
+    (add-event-handler widget "mouseReleaseEvent" click-test-handler)
 
     ;; show the widget
     ;;

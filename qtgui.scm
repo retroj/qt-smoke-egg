@@ -46,4 +46,10 @@
 (define delete-qtgui-smoke
   (foreign-lambda void delete_qtgui_Smoke))
 
+(init-qtgui-smoke)
+
+(define qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
+
+(set-finalizer! qtgui delete-qtgui-smoke)
+
 )

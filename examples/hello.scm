@@ -13,10 +13,7 @@
  qtcore
  qtgui)
 
-(init-qtcore-smoke)
-(init-qtgui-smoke)
-(let ((qtgui (make <SchemeSmokeBinding> 'smoke qtgui-smoke))
-      (stack (make-stack 3))
+(let ((stack (make-stack 3))
       (classid #f)
       (methid #f))
 
@@ -80,5 +77,3 @@
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid))
     (call-method-with-callbacks qtgui methid qapp stack)))
-(delete-qtcore-smoke)
-(delete-qtgui-smoke)

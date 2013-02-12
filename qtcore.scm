@@ -46,4 +46,12 @@
 (define delete-qtcore-smoke
   (foreign-lambda void delete_qtcore_Smoke))
 
+(init-qtcore-smoke)
+
+(define qtcore (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
+
+;;;XXX: what about calling delete-qtcore-smoke?  i don't think we can
+;;;     safely do this with garbage collection, because the caller may
+;;;     never need to use qtcore directly in the first place.
+
 )

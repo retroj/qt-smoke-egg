@@ -41,10 +41,9 @@
   ;; pointers to argc and argv.
   ;;
   (let ((qapp (instantiate qtgui "QApplication" "QApplication$?"
-                           (smoke-stack-populate!
-                            stack `(((c-pointer int) 0) ;; &argc
-                                    (unsigned-long 0))))) ;; argv
-        (widget (instantiate qtgui "QWidget" "QWidget" stack)))
+                           '(((c-pointer int) 0)  ;; &argc
+                             (unsigned-long 0)))) ;; argv
+        (widget (instantiate qtgui "QWidget" "QWidget")))
 
     ;; show the widget
     ;;

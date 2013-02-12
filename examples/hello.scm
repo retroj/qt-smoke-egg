@@ -7,7 +7,7 @@
 (import chicken scheme)
 
 (use
- (only srfi-13 string-join)
+ srfi-13
  coops
  extras
  smoke
@@ -19,15 +19,12 @@
          (smoke (slot-value binding 'smoke))
          (protected? (method-protected? method))
          (const? (method-const? method))
-         (argsvector (method-args method)))
+         (args (method-args method)))
     (let ((sig (sprintf "~A~A~A(~A)"
                         (if protected? "protected " "")
                         (if const? "const " "")
                         (method-name method)
-                        (string-join
-                         (map (lambda (x) (smoke-type-name smoke x))
-                              (s16vector->list argsvector))
-                         ", "))))
+                        (string-join args ", "))))
       (printf "~A(~A)::~A~%"
               (SchemeSmokeBinding-className
                (slot-value binding 'this)

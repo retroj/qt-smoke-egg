@@ -51,8 +51,8 @@
   ())
 
 (define-method (make-scheme-object (this <qtgui-binding>) type pointer)
-  (select type
-    (else (call-next-method))))
+  (cond
+   (else (call-next-method))))
 
 (init-qtgui-smoke)
 

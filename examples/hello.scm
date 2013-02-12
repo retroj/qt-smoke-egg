@@ -44,6 +44,8 @@
                              (unsigned-long 0)))) ;; argv
         (widget (instantiate qtgui "QWidget" "QWidget")))
 
+    (add-event-handler widget "mousePressEvent" click-test-handler)
+
     ;; show the widget
     ;;
     (set! classid (find-class qtgui "QWidget"))

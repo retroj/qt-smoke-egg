@@ -13,13 +13,12 @@
  qtcore
  qtgui)
 
-(define (click-test-handler this methidx obj stack abstract?)
-  (let* ((smoke (slot-value this 'smoke))
-         (meth (smoke-method smoke methidx))
-         (protected? (Method-protected? meth))
-         (const? (Method-const? meth))
-         (mname (smoke-method-name smoke meth))
-         (argsvector (smoke-method-args-vector smoke meth)))
+(define (click-test-handler binding method obj stack abstract?)
+  (let* ((smoke (slot-value binding 'smoke))
+         (protected? (Method-protected? method))
+         (const? (Method-const? method))
+         (mname (smoke-method-name smoke method))
+         (argsvector (smoke-method-args-vector smoke method)))
     (let ((name (sprintf "~A~A~A(~A)"
                          (if protected? "protected " "")
                          (if const? "const " "")
@@ -30,8 +29,8 @@
                           ", "))))
       (printf "~A(~A)::~A~%"
               (SchemeSmokeBinding-className
-               (slot-value this 'this)
-               (Method-classId meth))
+               (slot-value binding 'this)
+               (Method-classId method))
               obj
               name))))
 

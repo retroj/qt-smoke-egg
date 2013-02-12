@@ -46,9 +46,17 @@
 (define delete-qtcore-smoke
   (foreign-lambda void delete_qtcore_Smoke))
 
+
+(define-class <qtcore-binding> (<SchemeSmokeBinding>)
+  ())
+
+(define-method (make-scheme-object (this <qtcore-binding>) type pointer)
+  (cond
+   (else (call-next-method))))
+
 (init-qtcore-smoke)
 
-(define qtcore (make <SchemeSmokeBinding> 'smoke qtcore-smoke))
+(define qtcore (make <qtcore-binding> 'smoke qtcore-smoke))
 
 ;;;XXX: what about calling delete-qtcore-smoke?  i don't think we can
 ;;;     safely do this with garbage collection, because the caller may

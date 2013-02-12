@@ -14,7 +14,7 @@
  qtcore
  qtgui)
 
-(define (click-test-handler method obj stack abstract?)
+(define (click-test-handler method target stack)
   (let* ((binding (method-binding method))
          (smoke (slot-value binding 'smoke))
          (protected? (method-protected? method))
@@ -29,7 +29,7 @@
               (SchemeSmokeBinding-className
                (slot-value binding 'this)
                (method-classid method))
-              obj
+              target
               sig))))
 
 (let ((classid #f)

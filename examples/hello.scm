@@ -14,23 +14,24 @@
  qtcore
  qtgui)
 
-(define (click-test-handler method target stack)
+(define (click-test-handler method target . args)
   (let* ((binding (method-binding method))
          (smoke (slot-value binding 'smoke))
          (protected? (method-protected? method))
          (const? (method-const? method))
-         (args (method-args method)))
+         (argtypes (method-args method)))
     (let ((sig (sprintf "~A~A~A(~A)"
                         (if protected? "protected " "")
                         (if const? "const " "")
                         (method-name method)
-                        (string-join args ", "))))
-      (printf "~A(~A)::~A~%"
+                        (string-join argtypes ", "))))
+      (printf "~A(~A)::~A ~A~%"
               (SchemeSmokeBinding-className
                (slot-value binding 'this)
                (method-classid method))
               target
-              sig))))
+              sig
+              args))))
 
 (let ((classid #f)
       (methid #f))

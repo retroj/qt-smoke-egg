@@ -1,3 +1,7 @@
+#! /bin/sh
+#| -*- scheme -*-
+exec csi -s $0 "$@"
+|#
 
 ;;;
 ;;; Scheme implementation of hello.cpp from:

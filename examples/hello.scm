@@ -81,7 +81,7 @@ exec csi -s $0 "$@"
             (ModuleIndex-index methid))
     (call-method qtgui methid widget)
 
-    ;; QApplication exec
+    ;; QApplication exec (a static method)
     ;;
     (set! classid (find-class qtgui "QApplication"))
     (set! methid (find-method qtgui "QApplication" "exec"))

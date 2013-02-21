@@ -61,7 +61,9 @@ exec csi -s $0 "$@"
 
   (run-with-qapplication
    `(("-widgetcount" "-bg" "#eccada"))
-   (lambda ()
+   (lambda (args)
+     (printf "args: ~S~%" args)
+
      ;; make a widget.
      ;;
      (let ((widget (instantiate qtgui "QWidget" "QWidget")))

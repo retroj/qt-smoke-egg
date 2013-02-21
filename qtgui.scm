@@ -30,9 +30,11 @@
 (import chicken scheme foreign)
 
 (use
+ srfi-1
  coops
  extras
  lolevel
+ (only miscmacros dotimes)
  smoke)
 
 (foreign-declare "#include <smoke/qtgui_smoke.h>")
@@ -88,21 +90,28 @@
     (set-finalizer! p free-c-string-list)
     p))
 
+(define (c-string-list->string-list p len)
+  (define get-string
+    (foreign-lambda* c-string ((c-pointer p) (int i))
+      "char **q = (char **)p;"
+      "C_return(q[i]);"))
+  (let ((lst (list)))
+    (dotimes (i len)
+      (set! lst (cons (get-string p i) lst)))
+    (reverse! lst)))
+
 (define (run-with-qapplication args proc)
   (let* ((args (cons (program-name) (car args)))
          (nargs (length args))
          (argv (string-list->c-string-list args nargs)))
     (let-location ((argc int nargs))
-      (let ((qapp (instantiate qtgui "QApplication" "QApplication$?"
-                               `((c-pointer ,(location argc)) ;; &argc
-                                 (c-pointer ,argv)))))        ;; argv
-
-        ;; Qt will remove arguments that it recognizes, and will
-        ;; change argc and argv.  We should convert the changed argv
-        ;; back to a scheme list and pass it to proc.
+      (let* ((qapp (instantiate qtgui "QApplication" "QApplication$?"
+                                `((c-pointer ,(location argc)) ;; &argc
+                                  (c-pointer ,argv))))         ;; argv
+             (modified-args (c-string-list->string-list argv argc)))
         (dynamic-wind
             (lambda () #f)
-            proc
+            (lambda () (proc (cdr modified-args)))
             (lambda ()
               (let ((mid (find-method qtgui "QApplication" "~QApplication")))
                 (call-method qtgui mid qapp))))))))

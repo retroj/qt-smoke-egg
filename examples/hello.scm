@@ -64,6 +64,12 @@ exec csi -s $0 "$@"
    (lambda (args)
      (printf "args: ~S~%" args)
 
+     (define the-timer-handler (lambda _ #t))
+     (let ((qapp (qapplication-instance)))
+       (add-event-handler qapp "timerEvent" the-timer-handler)
+       (let ((methid (find-method qtcore "QObject" "startTimer$")))
+         (call-method qtcore methid qapp #f '((int 100)))))
+
      ;; make a widget.
      ;;
      (let ((widget (instantiate qtgui "QWidget" "QWidget")))

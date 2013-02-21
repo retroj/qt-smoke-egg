@@ -65,39 +65,39 @@ exec csi -s $0 "$@"
       ;;
       (let ((widget (instantiate qtgui "QWidget" "QWidget")))
 
-    (add-event-handler widget "mousePressEvent" click-test-handler)
-    (add-event-handler widget "mouseReleaseEvent" click-test-handler)
+        (add-event-handler widget "mousePressEvent" click-test-handler)
+        (add-event-handler widget "mouseReleaseEvent" click-test-handler)
 
-    ;; show the widget
-    ;;
-    (set! classid (find-class qtgui "QWidget"))
-    (set! methid (find-method qtgui "QWidget" "show"))
-    (printf "QWidget classId: [~A, ~A], show() methId: [~A, ~A]~%"
-            (smoke-modulename (ModuleIndex-smoke classid))
-            (ModuleIndex-index classid)
-            (smoke-modulename (ModuleIndex-smoke methid))
-            (ModuleIndex-index methid))
-    (call-method qtgui methid widget)
+        ;; show the widget
+        ;;
+        (set! classid (find-class qtgui "QWidget"))
+        (set! methid (find-method qtgui "QWidget" "show"))
+        (printf "QWidget classId: [~A, ~A], show() methId: [~A, ~A]~%"
+                (smoke-modulename (ModuleIndex-smoke classid))
+                (ModuleIndex-index classid)
+                (smoke-modulename (ModuleIndex-smoke methid))
+                (ModuleIndex-index methid))
+        (call-method qtgui methid widget)
 
-    ;; QApplication exec (a static method)
-    ;;
-    (set! classid (find-class qtgui "QApplication"))
-    (set! methid (find-method qtgui "QApplication" "exec"))
-    (printf "QApplication classId: ~A, exec() methId: [~A, ~A]~%"
-            (ModuleIndex-index classid)
-            (smoke-modulename (ModuleIndex-smoke methid))
-            (ModuleIndex-index methid))
-    (let ((stack (make-smoke-stack 1)))
-      (call-method-with-callbacks qtgui methid #f stack)
-      (printf "QApplication exec() return value: ~A~%"
-              (smoke-stack-int stack 0)))
+        ;; QApplication exec (a static method)
+        ;;
+        (set! classid (find-class qtgui "QApplication"))
+        (set! methid (find-method qtgui "QApplication" "exec"))
+        (printf "QApplication classId: ~A, exec() methId: [~A, ~A]~%"
+                (ModuleIndex-index classid)
+                (smoke-modulename (ModuleIndex-smoke methid))
+                (ModuleIndex-index methid))
+        (let ((stack (make-smoke-stack 1)))
+          (call-method-with-callbacks qtgui methid #f stack)
+          (printf "QApplication exec() return value: ~A~%"
+                  (smoke-stack-int stack 0)))
 
-    ;; print info about QApplication destructor.  the instance gets
-    ;; destroyed automatically by the surrounding `with-qapplication'
-    ;; form.
-    ;;
-    (set! methid (find-method qtgui "QApplication" "~QApplication"))
-    (printf "QApplication classId: ~A, ~~QApplication() methId: [~A, ~A]~%"
-            (ModuleIndex-index classid)
-            (smoke-modulename (ModuleIndex-smoke methid))
-            (ModuleIndex-index methid))))))
+        ;; print info about QApplication destructor.  the instance gets
+        ;; destroyed automatically by the surrounding `with-qapplication'
+        ;; form.
+        ;;
+        (set! methid (find-method qtgui "QApplication" "~QApplication"))
+        (printf "QApplication classId: ~A, ~~QApplication() methId: [~A, ~A]~%"
+                (ModuleIndex-index classid)
+                (smoke-modulename (ModuleIndex-smoke methid))
+                (ModuleIndex-index methid))))))

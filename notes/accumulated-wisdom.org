@@ -1,0 +1,9 @@
+
+* Sending signals to a Qt program
+
+When Qt is in its event loop, signals sent to the program will not be
+processed until control returns from the event loop to scheme.  For
+example, hitting control-c in the terminal fails to abort the program.
+These signals get processed when control returns to scheme, so it is a
+good idea to start a timer that periodically does so.  (hint: QObject
+startTimer on the qapp)

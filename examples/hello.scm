@@ -90,10 +90,8 @@ exec csi -s $0 "$@"
                (ModuleIndex-index classid)
                (smoke-modulename (ModuleIndex-smoke methid))
                (ModuleIndex-index methid))
-       (let ((stack (make-smoke-stack 1)))
-         (call-method-with-callbacks qtgui methid #f stack)
-         (printf "QApplication exec() return value: ~A~%"
-                 (smoke-stack-int stack 0)))
+       (let ((status (call-method-with-callbacks qtgui methid #f 'int)))
+         (printf "QApplication exec() return value: ~A~%" status))
 
        ;; print info about QApplication destructor.  the instance gets
        ;; destroyed automatically by the surrounding `with-qapplication'

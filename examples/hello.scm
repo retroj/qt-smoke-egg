@@ -59,13 +59,11 @@ exec csi -s $0 "$@"
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid)))
 
-  ;; make application and widget objects.  QApplication takes two args,
-  ;; pointers to argc and argv.
-  ;;
-  (let ((qapp (instantiate qtgui "QApplication" "QApplication$?"
-                           '(((c-pointer int) 0)  ;; &argc
-                             (unsigned-long 0)))) ;; argv
-        (widget (instantiate qtgui "QWidget" "QWidget")))
+  (with-qapplication ((list))
+    (lambda ()
+      ;; make a widget.
+      ;;
+      (let ((widget (instantiate qtgui "QWidget" "QWidget")))
 
     (add-event-handler widget "mousePressEvent" click-test-handler)
     (add-event-handler widget "mouseReleaseEvent" click-test-handler)
@@ -94,11 +92,12 @@ exec csi -s $0 "$@"
       (printf "QApplication exec() return value: ~A~%"
               (smoke-stack-int stack 0)))
 
-    ;; destroy the QApplication instance
+    ;; print info about QApplication destructor.  the instance gets
+    ;; destroyed automatically by the surrounding `with-qapplication'
+    ;; form.
     ;;
     (set! methid (find-method qtgui "QApplication" "~QApplication"))
     (printf "QApplication classId: ~A, ~~QApplication() methId: [~A, ~A]~%"
             (ModuleIndex-index classid)
             (smoke-modulename (ModuleIndex-smoke methid))
-            (ModuleIndex-index methid))
-    (call-method-with-callbacks qtgui methid qapp)))
+            (ModuleIndex-index methid))))))

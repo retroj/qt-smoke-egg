@@ -32,6 +32,7 @@
 (use
  coops
  extras
+ lolevel
  smoke)
 
 (foreign-declare "#include <smoke/qtgui_smoke.h>")
@@ -53,6 +54,73 @@
 (define-method (make-scheme-object (this <qtgui-binding>) type pointer)
   (cond
    (else (call-next-method))))
+
+
+(define (string-list->c-string-list lst #!optional len)
+  (define make-c-string-list
+    (foreign-lambda* c-pointer ((int len))
+      "char **p = (char **)malloc(sizeof(char**) * (len + 1));"
+      "p[len] = 0;"
+      "C_return(p);"))
+  (define copy-string-into-list
+    (foreign-lambda* void ((c-pointer p) (c-string s) (int i))
+      "char **q = (char **)p;"
+      "size_t len = strlen(s);"
+      "char *dest = (char *)malloc(len + 1);"
+      "strcpy(dest, s);"
+      "q[i] = dest;"))
+  (define free-c-string-list
+    (foreign-lambda* void ((c-pointer p))
+      "char **q = (char **)p;"
+      "while (*q) {"
+      "    free(*q);"
+      "    ++q;"
+      "}"
+      "free(p);"))
+  (let* ((len (or len (length lst)))
+         (p (make-c-string-list len))
+         (i 0))
+    (for-each
+     (lambda (s)
+       (copy-string-into-list p s i)
+       (set! i (+ 1 i)))
+     lst)
+    (set-finalizer! p free-c-string-list)
+    p))
+
+(define (make-int-pointer n)
+  (let ((p ((foreign-lambda* (c-pointer int) ((int init))
+              "int *p = (int *)malloc(sizeof(int));"
+              "*p = init;"
+              "C_return(p);")
+            n)))
+    (set-finalizer! p free)
+    p))
+
+(define-syntax with-qapplication
+  (syntax-rules ()
+    ((with-qapplication (arguments) proc)
+     (let* ((args (cons (program-name) arguments))
+            (nargs (length args))
+            (argc (make-int-pointer nargs))
+            (argv (string-list->c-string-list args nargs))
+            (qapp #f))
+       (dynamic-wind
+           (lambda ()
+             (unless qapp
+               (set! qapp (instantiate qtgui "QApplication" "QApplication$?"
+                                       `((c-pointer ,argc)      ;; &argc
+                                         (c-pointer ,argv)))))) ;; argv
+
+           ;; Qt will remove arguments that it recognizes, and will
+           ;; change argc and argv.  We should convert the changed argv
+           ;; back to a scheme list and pass it to proc.
+
+           proc
+           (lambda ()
+             (let ((mid (find-method qtgui "QApplication" "~QApplication")))
+               (call-method qtgui mid qapp))))))))
+
 
 (init-qtgui-smoke)
 

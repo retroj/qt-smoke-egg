@@ -116,6 +116,10 @@
               (let ((mid (find-method qtgui "QApplication" "~QApplication")))
                 (call-method qtgui mid qapp))))))))
 
+(define (qapplication-instance)
+  (let ((methid (find-method qtgui "QApplication" "instance")))
+    (call-method qtgui methid #f 'c-pointer)))
+
 
 (init-qtgui-smoke)
 

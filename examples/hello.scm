@@ -59,7 +59,8 @@ exec csi -s $0 "$@"
             (smoke-modulename (ModuleIndex-smoke methid))
             (ModuleIndex-index methid)))
 
-  (with-qapplication ((list))
+  (run-with-qapplication
+   `(("-widgetcount" "-bg" "#eccada"))
     (lambda ()
       ;; make a widget.
       ;;

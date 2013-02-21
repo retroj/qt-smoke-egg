@@ -88,38 +88,24 @@
     (set-finalizer! p free-c-string-list)
     p))
 
-(define (make-int-pointer n)
-  (let ((p ((foreign-lambda* (c-pointer int) ((int init))
-              "int *p = (int *)malloc(sizeof(int));"
-              "*p = init;"
-              "C_return(p);")
-            n)))
-    (set-finalizer! p free)
-    p))
+(define (run-with-qapplication args proc)
+  (let* ((args (cons (program-name) (car args)))
+         (nargs (length args))
+         (argv (string-list->c-string-list args nargs)))
+    (let-location ((argc int nargs))
+      (let ((qapp (instantiate qtgui "QApplication" "QApplication$?"
+                               `((c-pointer ,(location argc)) ;; &argc
+                                 (c-pointer ,argv)))))        ;; argv
 
-(define-syntax with-qapplication
-  (syntax-rules ()
-    ((with-qapplication (arguments) proc)
-     (let* ((args (cons (program-name) arguments))
-            (nargs (length args))
-            (argc (make-int-pointer nargs))
-            (argv (string-list->c-string-list args nargs))
-            (qapp #f))
-       (dynamic-wind
-           (lambda ()
-             (unless qapp
-               (set! qapp (instantiate qtgui "QApplication" "QApplication$?"
-                                       `((c-pointer ,argc)      ;; &argc
-                                         (c-pointer ,argv)))))) ;; argv
-
-           ;; Qt will remove arguments that it recognizes, and will
-           ;; change argc and argv.  We should convert the changed argv
-           ;; back to a scheme list and pass it to proc.
-
-           proc
-           (lambda ()
-             (let ((mid (find-method qtgui "QApplication" "~QApplication")))
-               (call-method qtgui mid qapp))))))))
+        ;; Qt will remove arguments that it recognizes, and will
+        ;; change argc and argv.  We should convert the changed argv
+        ;; back to a scheme list and pass it to proc.
+        (dynamic-wind
+            (lambda () #f)
+            proc
+            (lambda ()
+              (let ((mid (find-method qtgui "QApplication" "~QApplication")))
+                (call-method qtgui mid qapp))))))))
 
 
 (init-qtgui-smoke)

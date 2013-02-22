@@ -100,21 +100,27 @@
       (set! lst (cons (get-string p i) lst)))
     (reverse! lst)))
 
+(define-external qapp_argc int)
+(define init-qapp_argc
+  (foreign-lambda* (c-pointer int) ((int val))
+    "qapp_argc = val;"
+    "C_return(&qapp_argc);"))
+
 (define (run-with-qapplication args proc)
   (let* ((args (cons (program-name) (car args)))
          (nargs (length args))
-         (argv (string-list->c-string-list args nargs)))
-    (let-location ((argc int nargs))
-      (let* ((qapp (instantiate qtgui "QApplication" "QApplication$?"
-                                `((c-pointer ,(location argc)) ;; &argc
-                                  (c-pointer ,argv))))         ;; argv
-             (modified-args (c-string-list->string-list argv argc)))
-        (dynamic-wind
-            (lambda () #f)
-            (lambda () (proc (cdr modified-args)))
-            (lambda ()
-              (let ((mid (find-method qtgui "QApplication" "~QApplication")))
-                (call-method qtgui mid qapp))))))))
+         (argv (string-list->c-string-list args nargs))
+         (argc (init-qapp_argc nargs))
+         (qapp (instantiate qtgui "QApplication" "QApplication$?"
+                            `((c-pointer ,argc)
+                              (c-pointer ,argv))))
+         (modified-args (c-string-list->string-list argv qapp_argc)))
+    (dynamic-wind
+        (lambda () #f)
+        (lambda () (proc (cdr modified-args)))
+        (lambda ()
+          (let ((mid (find-method qtgui "QApplication" "~QApplication")))
+            (call-method qtgui mid qapp))))))
 
 (define (qapplication-instance)
   (let ((methid (find-method qtgui "QApplication" "instance")))

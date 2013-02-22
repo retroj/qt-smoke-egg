@@ -12,7 +12,7 @@ exec csi -s $0 "$@"
  qtgui)
 
 (run-with-qapplication
- `(,(command-line-arguments))
+ (list (command-line-arguments))
  (lambda (args)
    (let ((qapp (qapplication-instance)))
      (add-event-handler qapp "timerEvent" void)

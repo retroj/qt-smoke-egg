@@ -35,6 +35,26 @@
  smoke)
 
 (foreign-declare "#include <smoke/qtcore_smoke.h>")
+(foreign-declare "#include <QtCore>")
+
+(define make-qstring
+  (foreign-lambda* c-pointer ((c-string str))
+    "QString *s = new QString(QString::fromUtf8(str));"
+    "C_return(s);"))
+
+(define qstring->string
+  (foreign-lambda* c-string ((c-pointer qstr))
+    "QString *s = (QString *)qstr;"
+    "C_return(s->toUtf8().data());"))
+
+(smoke-stack-add-type!
+ 'qstring
+ (lambda (stack idx)
+   (qstring->string
+    (%smoke-stack-pointer stack idx)))
+ (lambda (stack idx s)
+   (%smoke-stack-set-pointer!
+    stack idx (make-qstring s))))
 
 (define-foreign-variable %qtcore-smoke c-pointer "qtcore_Smoke")
 (define qtcore-smoke #f)

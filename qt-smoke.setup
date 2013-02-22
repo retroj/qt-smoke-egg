@@ -1,8 +1,12 @@
 ;; -*- scheme -*-
 
 (compile qtcore.scm -j qtcore -s -O2 -d0 -c++
+         -C "`pkg-config --cflags QtCore`"
+         -L "`pkg-config --libs QtCore`"
          -lsmokeqtcore)
 (compile qtcore.import.scm -s -O2 -d0 -c++
+         -C "`pkg-config --cflags QtCore`"
+         -L "`pkg-config --libs QtCore`"
          -lsmokeqtcore)
 
 (compile qtgui.scm -j qtgui -s -O2 -d0 -c++

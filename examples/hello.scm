@@ -66,7 +66,7 @@ exec csi -s $0 "$@"
 
      (let ((qapp (qapplication-instance)))
        (add-event-handler qapp "timerEvent" void)
-       (%call-method qtcore '("QObject" "startTimer$") qapp #f '((int 100))))
+       (call-method qtcore QObject::startTimer qapp #f '((int 100))))
 
      ;; make a widget.
      ;;

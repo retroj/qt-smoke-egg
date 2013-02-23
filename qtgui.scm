@@ -118,13 +118,10 @@
     (dynamic-wind
         (lambda () #f)
         (lambda () (proc (cdr modified-args)))
-        (lambda ()
-          (let ((mid (find-method qtgui "QApplication" "~QApplication")))
-            (%call-method qtgui mid qapp))))))
+        (lambda () (call-method qtgui QApplication::~QApplication qapp)))))
 
 (define (qapplication-instance)
-  (let ((methid (find-method qtgui "QApplication" "instance")))
-    (%call-method qtgui methid #f 'c-pointer)))
+  (call-method qtgui QApplication::instance #f 'c-pointer))
 
 
 (init-qtgui-smoke)

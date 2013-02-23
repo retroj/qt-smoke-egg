@@ -56,6 +56,11 @@
    (%smoke-stack-set-pointer!
     stack idx (string->qstring s))))
 
+(begin-for-syntax
+ (set! smoke-type-signatures
+       (cons '(qstring . scalar)
+             smoke-type-signatures)))
+
 (define-foreign-variable %qtcore-smoke c-pointer "qtcore_Smoke")
 (define qtcore-smoke #f)
 

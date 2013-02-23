@@ -66,7 +66,7 @@ exec csi -s $0 "$@"
 
      (let ((qapp (qapplication-instance)))
        (add-event-handler qapp "timerEvent" void)
-       (call-method qtcore '("QObject" "startTimer$") qapp #f '((int 100))))
+       (%call-method qtcore '("QObject" "startTimer$") qapp #f '((int 100))))
 
      ;; make a widget.
      ;;
@@ -84,7 +84,7 @@ exec csi -s $0 "$@"
                (ModuleIndex-index classid)
                (smoke-modulename (ModuleIndex-smoke methid))
                (ModuleIndex-index methid))
-       (call-method qtgui methid widget)
+       (%call-method qtgui methid widget)
 
        ;; QApplication exec (a static method)
        ;;
@@ -94,7 +94,7 @@ exec csi -s $0 "$@"
                (ModuleIndex-index classid)
                (smoke-modulename (ModuleIndex-smoke methid))
                (ModuleIndex-index methid))
-       (let ((status (call-method-with-callbacks qtgui methid #f 'int)))
+       (let ((status (%call-method-with-callbacks qtgui methid #f 'int)))
          (printf "QApplication exec() return value: ~A~%" status))
 
        ;; print info about QApplication destructor.  the instance gets

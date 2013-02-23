@@ -120,11 +120,11 @@
         (lambda () (proc (cdr modified-args)))
         (lambda ()
           (let ((mid (find-method qtgui "QApplication" "~QApplication")))
-            (call-method qtgui mid qapp))))))
+            (%call-method qtgui mid qapp))))))
 
 (define (qapplication-instance)
   (let ((methid (find-method qtgui "QApplication" "instance")))
-    (call-method qtgui methid #f 'c-pointer)))
+    (%call-method qtgui methid #f 'c-pointer)))
 
 
 (init-qtgui-smoke)

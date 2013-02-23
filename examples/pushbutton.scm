@@ -51,4 +51,4 @@ exec csi -s $0 "$@"
      (add-event-handler button2 "mouseReleaseEvent" make-a-widget)
 
      (call-method qtgui QWidget::show widget)
-     (%call-method-with-callbacks qtgui '("QApplication" "exec") #f 'int))))
+     (call-method-with-callbacks qtgui QApplication::exec #f 'int))))

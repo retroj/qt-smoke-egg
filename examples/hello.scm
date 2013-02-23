@@ -70,7 +70,7 @@ exec csi -s $0 "$@"
 
      ;; make a widget.
      ;;
-     (let ((widget (instantiate qtgui "QWidget" "QWidget")))
+     (let ((widget (instantiate qtgui QWidget)))
 
        (add-event-handler widget "mousePressEvent" click-test-handler)
        (add-event-handler widget "mouseReleaseEvent" click-test-handler)

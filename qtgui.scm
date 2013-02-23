@@ -111,9 +111,9 @@
          (nargs (length args))
          (argv (string-list->c-string-list args nargs))
          (argc (init-qapp_argc nargs))
-         (qapp (instantiate qtgui "QApplication" "QApplication$?"
-                            `((c-pointer ,argc)
-                              (c-pointer ,argv))))
+         (qapp (%instantiate qtgui "QApplication" "QApplication$?"
+                             `((c-pointer ,argc)
+                               (c-pointer ,argv))))
          (modified-args (c-string-list->string-list argv qapp_argc)))
     (dynamic-wind
         (lambda () #f)

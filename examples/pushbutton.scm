@@ -18,16 +18,13 @@ exec csi -s $0 "$@"
      (add-event-handler qapp "timerEvent" void)
      (call-method qtcore QObject::startTimer qapp #f ((int 100))))
 
-   (let* ((widget (instantiate qtgui QWidget))
-          (layout (instantiate qtgui QGridLayout
-                               ((c-pointer ,widget))))
-          (button1 (instantiate qtgui QPushButton
-                                ((qstring "Push the button, Frank.")
-                                 (c-pointer #f))))
-          (button2 (instantiate qtgui QPushButton
-                                ((qstring "Make a widget...")
-                                 (c-pointer #f))))
-          (label1 (instantiate qtgui QLabel))
+   (let* ((widget (new qtgui QWidget))
+          (layout (new qtgui QGridLayout ((c-pointer ,widget))))
+          (button1 (new qtgui QPushButton ((qstring "Push the button, Frank.")
+                                           (c-pointer #f))))
+          (button2 (new qtgui QPushButton ((qstring "Make a widget...")
+                                           (c-pointer #f))))
+          (label1 (new qtgui QLabel))
           (label2 #f))
 
      (let ((mid (find-method qtgui "QGridLayout" "addWidget#$$")))
@@ -40,9 +37,8 @@ exec csi -s $0 "$@"
 
      (define (make-a-widget . ignored)
        (unless label2
-         (set! label2 (instantiate qtgui QLabel
-                                   ((qstring "It came true!")
-                                    (c-pointer #f))))
+         (set! label2 (new qtgui QLabel ((qstring "It came true!")
+                                         (c-pointer #f))))
          (call-method qtgui QGridLayout::addWidget
                       layout #f ((c-pointer ,label2)
                                  (int 1) (int 1)))))

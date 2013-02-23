@@ -16,7 +16,7 @@ exec csi -s $0 "$@"
  (lambda (args)
    (let ((qapp (qapplication-instance)))
      (add-event-handler qapp "timerEvent" void)
-     (call-method qtcore QObject::startTimer qapp #f '((int 100))))
+     (call-method qtcore QObject::startTimer qapp #f ((int 100))))
 
    (let* ((widget (instantiate qtgui "QWidget" "QWidget"))
           (layout (instantiate qtgui "QGridLayout" "QGridLayout#"
@@ -36,7 +36,7 @@ exec csi -s $0 "$@"
        (%call-method qtgui mid layout #f `((c-pointer ,label1) (int 0) (int 1))))
 
      (define (push-the-button-frank . ignored)
-       (call-method qtgui QLabel::setText label1 #f `((qstring "Baaaah!"))))
+       (call-method qtgui QLabel::setText label1 #f ((qstring "Baaaah!"))))
 
      (define (make-a-widget . ignored)
        (unless label2
@@ -44,8 +44,8 @@ exec csi -s $0 "$@"
                                    `((qstring "It came true!")
                                      (c-pointer #f))))
          (call-method qtgui QGridLayout::addWidget
-                      layout #f `((c-pointer ,label2)
-                                  (int 1) (int 1)))))
+                      layout #f ((c-pointer ,label2)
+                                 (int 1) (int 1)))))
 
      (add-event-handler button1 "mouseReleaseEvent" push-the-button-frank)
      (add-event-handler button2 "mouseReleaseEvent" make-a-widget)
